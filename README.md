@@ -1,5 +1,6 @@
 # RaaSwithSORRIR
 ## Directory Structure
+```sh
 example-1-mvp/
 │
 ├── 📁 data/
@@ -42,4 +43,4 @@ example-1-mvp/
 ├── tsconfig.json                            # TypeScript config
 ├── README.md                                # (Optional)
 └── .gitignore                               
-
+```
