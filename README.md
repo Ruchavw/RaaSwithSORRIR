@@ -2,70 +2,22 @@
 ## Directory Structure
 ```sh
 raas-mvp/
+├── source/
+│   ├── components/
+│   │   ├── sensor.ts
+│   │   ├── fault-handler.ts
+│   │   ├── raas-agent.ts      ← ✅ RaaS agent reads anomaly.json here
+│   ├── core-app.ts            ← ✅ Core unaffected logic
+│   ├── mock-model.ts          ← ✅ Main simulation orchestrator
 │
-├── README.md
-├── requirements.txt
-├── docker-compose.yml
-├── .env
-├── run.sh
+├── model/
+│   ├── train_model.py         ← ✅ Trains and saves the model
+│   ├── infer_model.py         ← ✅ Reads live data, writes to anomaly.json
+│   ├── isolation-train.csv    ← ✅ Training data
+│   ├── live-sensor.csv        ← ✅ Simulated incoming readings
+│   ├── anomaly.json           ← ✅ Written by Python, read by TypeScript
 │
-├── config/
-│   └── settings.yaml
-│
-├── data/
-│   ├── logs/
-│   ├── inputs/
-│   └── outputs/
-│
-├── models/
-│   ├── isolation_forest.py
-│   └── utils.py
-│
-├── recovery/
-│   ├── auto_recovery.py
-│   ├── reroute_engine.py
-│   └── backup_policies.yaml
-│
-├── dashboard/
-│   ├── app.py
-│   ├── templates/
-│   └── static/
-│
-├── policy_engine/
-│   ├── engine.py
-│   ├── policies.yaml
-│   └── policy_utils.py
-│
-├── cloud/
-│   ├── api_gateway/
-│   ├── edge_connector/
-│   ├── deploy/
-│   └── cloud_core.py
-│
-├── containerization/
-│   ├── Dockerfile
-│   ├── docker-compose.override.yml
-│   └── scripts/
-│
-├── api/
-│   ├── app.py
-│   ├── routes/
-│   └── schemas/
-│
-├── middleware/
-│   ├── sorrir_core/
-│   │   ├── __init__.py
-│   │   ├── architecture_config.json    
-│   │   ├── event_definitions.py         
-│   │   ├── recovery_behaviors.py       
-│   │   └── component_registry.py     
-│   ├── integrations/
-│   │   ├── detector_adapter.py        
-│   │   └── policy_adapter.py        
-│   └── orchestrator.py              
-│
-└── docs/
-    ├── architecture_diagram.png
-    ├── sorrir_workflow.md
-    └── mvp_summary.md
+├── package.json
+├── tsconfig.json
+├── README.md (optional)
 ```
