@@ -1,0 +1,33 @@
+
+Edge Computing Anomaly Detection Report
+=====================================
+
+Dataset Summary:
+- Total data points: 1,470
+- Anomalies detected: 74
+- Anomaly rate: 5.03%
+
+Anomaly Score Statistics:
+- Mean score: 0.119
+- Std deviation: 0.067
+- Min score: -0.146
+- Max score: 0.206
+
+Device-wise Anomaly Summary:
+                       anomaly anomaly_score                     
+                      <lambda>          mean    std    min    max
+device                                                           
+cam-1                        1         0.170  0.042 -0.075  0.206
+cam-2                        1         0.172  0.043 -0.002  0.206
+cloud                       30         0.057  0.055 -0.146  0.105
+fog-0                       26         0.064  0.049 -0.113  0.116
+irrigation-controller       12         0.097  0.061 -0.110  0.157
+signal-monitor               1         0.139  0.051 -0.052  0.185
+soil-sensor-node             3         0.135  0.053 -0.017  0.183
+
+Top 5 Anomalies (by score):
+- Time: 1900, Device: cloud, Score: -0.001
+- Time: 1500, Device: cam-2, Score: -0.002
+- Time: 400, Device: fog-0, Score: -0.003
+- Time: 1600, Device: irrigation-controller, Score: -0.003
+- Time: 1710, Device: fog-0, Score: -0.005

@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "outDir": "./dist/",
+    "strict": true,
+    "sourceMap": true,
+    "declaration": true,
+    "noImplicitAny": false,
+    "lib": ["ES6"],
+    "types": ["node"],
+    "esModuleInterop": true,          // ✅ Fixes convict import error
+    "allowSyntheticDefaultImports": true,  // ✅ Makes default import work for CommonJS
+    "resolveJsonModule": true         // ✅ (Optional) Allows importing JSON files
+  },
+  "include": ["source/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
+}
+

@@ -1,0 +1,54 @@
+{
+    "componentInstances": {
+        "barrier": [
+            {
+                "name": "barrier",
+                "startState": "barrierStartState"
+            }
+        ],
+        "DSB": [
+            {
+                "name": "DSB",
+                "startState": "DSBStartState"
+            }
+        ],
+        "sensor": [
+            {
+                "name": "sensor",
+                "startState": "sensorStartState"
+            }
+        ],
+        "user": [
+            {
+                "name": "user",
+                "startState": "userStartState"
+            }
+        ]
+    },
+    "connections": [
+        {
+            "sourceComponent": "DSB",
+            "sourcePort": "TO_BARRIER",
+            "targetComponent": "barrier",
+            "targetPort": "FROM_DSB"
+        },
+        {
+            "sourceComponent": "DSB",
+            "sourcePort": "TO_USER",
+            "targetComponent": "user",
+            "targetPort": "FROM_DSB"
+        },
+        {
+            "sourceComponent": "user",
+            "sourcePort": "TO_DSB",
+            "targetComponent": "DSB",
+            "targetPort": "FROM_USER"
+        },
+        {
+            "sourceComponent": "sensor",
+            "sourcePort": "TO_DSB",
+            "targetComponent": "DSB",
+            "targetPort": "FROM_SENSOR"
+        }
+    ]
+}

@@ -1,0 +1,47 @@
+{
+  "name": "@sorrir/example-1-mvp",
+  "version": "0.9.0",
+  "license": "Apache-2.0",
+  "scripts": {
+    "lint-test": "eslint . --ext .ts",
+    "lint-fix": "eslint . --ext .ts --fix",
+    "build": "tsc --incremental",
+    "start": "node dist/main.js",
+    "startExecutor": "node dist/app-executor.js",
+    "startForever": "forever dist/app-executor.js",
+    "startDebug": "node dist/app-executor.js",
+    "stop": "forever stop dist/app-executor.js",
+    "degradation": "node dist/degradation-scenario.js",
+    "test": "jest -i",
+    "pnpm-create-lock": "pnpm install --lockfile-only",
+    "getSetupInfo": "node -e 'console.log(JSON.stringify(require(\"@sorrir/framework\").getSetupInfo(),undefined,2))'",
+    "sendEvent": "node node_modules/@sorrir/framework/dist/scripts/sendEvent.js"
+  },
+  "pre-commit": [
+    "lint-fix",
+    "pnpm-create-lock"
+  ],
+  "dependencies": {
+    "@sorrir/framework": "^0.29.0",
+    "@sorrir/sorrir-logging": "^2.1.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.23",
+    "@types/lodash": "^4.14.168",
+    "@types/node": "^15.0.1",
+    "@typescript-eslint/eslint-plugin": "^4.22.1",
+    "@typescript-eslint/parser": "^4.22.1",
+    "eslint": "^7.25.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "jest": "^26.6.3",
+    "pnpm": "^6.2.5",
+    "pre-commit": "^1.2.2",
+    "prettier": "^2.3.2",
+    "typescript": "^5.8.3"
+  },
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "description": ""
+}

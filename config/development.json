@@ -1,0 +1,153 @@
+{
+  "HostConfiguration": {
+    "a": {
+      "host": "localhost",
+      "port": 1234
+    },
+    "b": {
+      "host": "localhost",
+      "port": 1235
+    },
+    "c": {
+      "host": "localhost",
+      "port": 1236
+    }
+  },
+  "DeploymentConfiguration": {
+    "a": {
+      "components": ["barrier", "user"]
+    },
+    "b": {
+      "components": ["DSB"]
+    },
+    "c": {
+      "components": ["barrier", "user", "DSB"]
+    }
+  },
+  "CommunicationConfiguration": {
+    "connectionTechs": [
+      {
+        "sourceContainer": "ext",
+        "sourceComponent": "sensor",
+        "sourcePort": "TO_DSB",
+        "targetContainer": "b",
+        "targetComponent": "DSB",
+        "targetPort": "FROM_SENSOR",
+        "commOption": "REST"
+      },
+      {
+        "sourceContainer": "ext",
+        "sourceComponent": "sensor",
+        "sourcePort": "TO_DSB",
+        "targetContainer": "c",
+        "targetComponent": "DSB",
+        "targetPort": "FROM_SENSOR",
+        "commOption": "REST"
+      },
+      {
+        "sourceContainer": "b",
+        "sourceComponent": "DSB",
+        "sourcePort": "TO_BARRIER",
+        "targetContainer": "a",
+        "targetComponent": "barrier",
+        "targetPort": "FROM_DSB",
+        "commOption": "REST"
+      },
+      {
+        "sourceContainer": "b",
+        "sourceComponent": "DSB",
+        "sourcePort": "TO_BARRIER",
+        "targetContainer": "c",
+        "targetComponent": "barrier",
+        "targetPort": "FROM_DSB",
+        "commOption": "REST"
+      },
+      {
+        "sourceContainer": "c",
+        "sourceComponent": "DSB",
+        "sourcePort": "TO_BARRIER",
+        "targetContainer": "a",
+        "targetComponent": "barrier",
+        "targetPort": "FROM_DSB",
+        "commOption": "REST"
+      },
+      {
+        "sourceContainer": "b",
+        "sourceComponent": "DSB",
+        "sourcePort": "TO_USER",
+        "targetContainer": "a",
+        "targetComponent": "user",
+        "targetPort": "FROM_DSB",
+        "commOption": "MQTT"
+      },
+      {
+        "sourceContainer": "b",
+        "sourceComponent": "DSB",
+        "sourcePort": "TO_USER",
+        "targetContainer": "c",
+        "targetComponent": "user",
+        "targetPort": "FROM_DSB",
+        "commOption": "MQTT"
+      },
+      {
+        "sourceContainer": "c",
+        "sourceComponent": "DSB",
+        "sourcePort": "TO_USER",
+        "targetContainer": "a",
+        "targetComponent": "user",
+        "targetPort": "FROM_DSB",
+        "commOption": "MQTT"
+      },
+      {
+        "sourceContainer": "a",
+        "sourceComponent": "user",
+        "sourcePort": "TO_DSB",
+        "targetContainer": "b",
+        "targetComponent": "DSB",
+        "targetPort": "FROM_USER",
+        "commOption": "REST"
+      },
+      {
+        "sourceContainer": "a",
+        "sourceComponent": "user",
+        "sourcePort": "TO_DSB",
+        "targetContainer": "c",
+        "targetComponent": "DSB",
+        "targetPort": "FROM_USER",
+        "commOption": "REST"
+      },
+      {
+        "sourceContainer": "c",
+        "sourceComponent": "user",
+        "sourcePort": "TO_DSB",
+        "targetContainer": "b",
+        "targetComponent": "DSB",
+        "targetPort": "FROM_USER",
+        "commOption": "REST"
+      }
+    ]
+  },
+  "MQTTConfiguration": {
+    "host": "test.mosquitto.org"
+  },
+  "BLEConfiguration": {
+    "a": {
+      "sendHost": "localhost",
+      "sendPort": 8080,
+      "listenHost": "localhost",
+      "listenPort": 8081
+    },
+    "b": {
+      "sendHost": "localhost",
+      "sendPort": 8080,
+      "listenHost": "localhost",
+      "listenPort": 8081
+    },
+    "c": {
+      "sendHost": "localhost",
+      "sendPort": 8080,
+      "listenHost": "localhost",
+      "listenPort": 8081
+    }
+  }
+}

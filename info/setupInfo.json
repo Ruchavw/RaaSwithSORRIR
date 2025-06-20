@@ -1,0 +1,123 @@
+{
+  "components": {
+    "barrier": {
+      "name": "barrier",
+      "ports": [
+        {
+          "name": "FROM_DSB",
+          "eventTypes": [
+            "OPEN",
+            "CLOSE"
+          ],
+          "direction": "in"
+        }
+      ],
+      "tsType": "Component"
+    },
+    "DSB": {
+      "name": "DSB",
+      "ports": [
+        {
+          "name": "FROM_SENSOR",
+          "eventTypes": [
+            "DETECTION",
+            "NOTHING"
+          ],
+          "direction": "in"
+        },
+        {
+          "name": "TO_BARRIER",
+          "eventTypes": [
+            "OPEN",
+            "CLOSE"
+          ],
+          "direction": "out"
+        },
+        {
+          "name": "FROM_USER",
+          "eventTypes": [
+            "CAR_DETECTED",
+            "SELECTION_MADE",
+            "CAR_PASSED"
+          ],
+          "direction": "in"
+        },
+        {
+          "name": "TO_USER",
+          "eventTypes": [
+            "ASK_SELECTION"
+          ],
+          "direction": "out"
+        }
+      ],
+      "tsType": "Component"
+    },
+    "user": {
+      "name": "user",
+      "ports": [
+        {
+          "name": "FROM_DSB",
+          "eventTypes": [
+            "ASK_SELECTION"
+          ],
+          "direction": "in"
+        },
+        {
+          "name": "TO_DSB",
+          "eventTypes": [
+            "CAR_DETECTED",
+            "SELECTION_MADE",
+            "CAR_PASSED"
+          ],
+          "direction": "out"
+        }
+      ],
+      "tsType": "Component"
+    },
+    "sensor": {
+      "name": "sensor",
+      "ports": [
+        {
+          "name": "TO_DSB",
+          "eventTypes": [
+            "DETECTION",
+            "NOTHING"
+          ],
+          "direction": "out"
+        }
+      ],
+      "tsType": "Component"
+    }
+  },
+  "startStates": {
+    "barrierStartState": {
+      "state": {
+        "fsm": "CLOSED"
+      },
+      "events": [],
+      "tsType": "State"
+    },
+    "DSBStartState": {
+      "state": {
+        "fsm": "IDLE"
+      },
+      "events": [],
+      "tsType": "State"
+    },
+    "userStartState": {
+      "state": {
+        "fsm": "WAITING"
+      },
+      "events": [],
+      "tsType": "State"
+    },
+    "sensorStartState": {
+      "state": {
+        "fsm": "NO_CAR",
+        "my": 0
+      },
+      "events": [],
+      "tsType": "State"
+    }
+  }
+}

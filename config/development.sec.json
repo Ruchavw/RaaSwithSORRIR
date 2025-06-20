@@ -1,0 +1,19 @@
+{
+  "ssl" : true,
+  "privateKey": "./ssl/key.pem",
+  "passphrase": "password",
+  "certificate": "./ssl/cert.pem",
+
+  "communicationSecret": [
+    {
+      "from" : "a",
+      "to" : "b",
+      "secret" : "1slNSESUSg6drb1X1Vm9FO0SL9nsdex3"
+    },
+    {
+      "from" : "b",
+      "to" : "a",
+      "secret" : "LhRYTLSHMRIjHcAbxLjN1nFT7ATLIwSs"
+    }
+  ]
+}
