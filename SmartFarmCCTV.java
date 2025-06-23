@@ -965,3 +965,4 @@ public static class EnhancedMetricsLogger extends SimEntity {
         Log.printLine("Expected total lines in CSV: " + (logCount * devices.size()));
     }
 }
+}
