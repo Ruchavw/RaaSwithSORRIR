@@ -1,0 +1,48 @@
+[
+  {
+    "cycle": 1,
+    "sensorState": "CAR",
+    "raasEvents": [
+      "FAULT"
+    ],
+    "faultHandlerState": "MONITORING",
+    "rideC": "MONITOR",
+    "rideD": "FORWARDING"
+  },
+  {
+    "cycle": 2,
+    "sensorState": "CAR",
+    "raasEvents": [],
+    "faultHandlerState": "MONITORING",
+    "rideC": "MONITOR",
+    "rideD": "FORWARDING"
+  },
+  {
+    "cycle": 3,
+    "sensorState": "FAULTY",
+    "raasEvents": [
+      "FAULT"
+    ],
+    "faultHandlerState": "MONITORING",
+    "rideC": "MONITOR",
+    "rideD": "FORWARDING"
+  },
+  {
+    "cycle": 4,
+    "sensorState": "FAULTY",
+    "raasEvents": [],
+    "faultHandlerState": "MONITORING",
+    "rideC": "MONITOR",
+    "rideD": "FORWARDING"
+  },
+  {
+    "cycle": 5,
+    "sensorState": "FAULTY",
+    "raasEvents": [
+      "FAULT"
+    ],
+    "faultHandlerState": "MONITORING",
+    "rideC": "MONITOR",
+    "rideD": "FORWARDING"
+  }
+]

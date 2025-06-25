@@ -1,0 +1,14 @@
+{
+  "name": "faulty-app",
+  "version": "1.0.0",
+  "description": "Deliberately faulty IoT app for RaaS testing",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "YourName",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

@@ -1,18 +1,19 @@
-FROM gitlab-vs.informatik.uni-ulm.de:4567/sorrir/mvp:master
+FROM node:18
+
+# Install pnpm
+RUN npm install -g pnpm
 
 WORKDIR /usr/src/sorrir/app
-COPY ./package.json .
-COPY ./pnpm-lock.yaml .
-COPY ./tsconfig.json .
-COPY ./source ./source
-COPY ./config ./config
-COPY ./dist ./dist
-RUN pnpm link ../framework --silent && \
-    echo "framework successfully linked" && \
-    pnpm install --frozen-lockfile --prod --silent && \
-    echo "installed dependencies"
 
-ARG NODE_ENV=production
-ENV NODE_ENV $NODE_ENV
+# If you only have source/components, copy that
+COPY source/components ./source
 
-ENTRYPOINT [ "npm", "run", "startExecutor" ]
+
+
+# Install dependencies if package.json is eventually present
+# COPY ./package.json ./
+# COPY ./pnpm-lock.yaml ./
+# RUN pnpm install --frozen-lockfile --prod --silent || true
+
+# Run the executor (adjust if necessary)
+CMD ["echo", "RaaS executor started (mock)"]
