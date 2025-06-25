@@ -1,0 +1,9 @@
+version: "3"
+services:
+  faulty-app:
+    build: .
+    container_name: faulty-app
+    ports:
+      - "3000:3000"
+    restart: "no"  # Let RaaS handle recovery
+
