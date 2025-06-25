@@ -1,3 +1,6 @@
+import * as fs from "fs";
+import { exec } from "child_process";
+
 import {
   AtomicComponent,
   StateMachineState,
@@ -27,12 +30,23 @@ import {
   RaaSPorts,
 } from "./components/raas-agent";
 
+import {
+  rideC,
+  rideCStartState,
+  sm as rideCSM,
+} from "./components/ride-c";
+
+import {
+  rideD,
+  rideDStartState,
+  sm as rideDSM,
+} from "./components/ride-d";
+
 import { coreApplicationLogic } from "./core-app";
 
-// ✅ For dashboard logging
-const logs: any[] = [];
+const fsmLogPath = "data/outputs/fsm_log.json";
 
-// Generic state machine runner
+// ✅ Generic transition runner
 function runTransition<TState, TMy, TEvent, TPort>(
   fsm: any,
   state: StateMachineState<TState, TMy, TEvent, TPort>,
@@ -77,16 +91,19 @@ function runTransition<TState, TMy, TEvent, TPort>(
   };
 }
 
+// ✅ FSM Simulation Config
 export const example_config = {
   run: async () => {
     let sensorState = sensorStartState;
     let faultHandlerState = faultHandlerStartState;
     let raasState = raasAgentStartState;
+    let rideCState = rideCStartState;
+    let rideDState = rideDStartState;
+
+    const logs: any[] = [];
 
     for (let i = 0; i < 5; i++) {
       console.log(`\n🔁 Cycle ${i + 1}`);
-
-      // Run application logic (simulated)
       coreApplicationLogic();
 
       if (i === 2) {
@@ -94,15 +111,12 @@ export const example_config = {
         sensorState.state.my = -1;
       }
 
-      // Step 1: Sensor FSM
       const sensorResult = runTransition(sensorSM, sensorState);
       sensorState = sensorResult.newState;
 
-      // Step 2: RaaS Agent (reads from anomaly.json)
       const raasResult = runTransition(raasSM, raasState);
       raasState = raasResult.newState;
 
-      // Step 3: Fault Handler handles events from RaaS Agent
       const faultResult = runTransition(
         faultSM,
         faultHandlerState,
@@ -110,30 +124,60 @@ export const example_config = {
       );
       faultHandlerState = faultResult.newState;
 
-      // Run again (as unaffected core logic)
+      const rideCResult = runTransition(rideCSM, rideCState, raasResult.raisedEvents);
+      rideCState = rideCResult.newState;
+
+      const rideDResult = runTransition(rideDSM, rideDState, rideCResult.raisedEvents);
+      rideDState = rideDResult.newState;
+
       coreApplicationLogic();
 
-      // Logging states
-      console.log(`📡 Sensor FSM: ${sensorState.state.fsm}`);
-      console.log(`📡 RaaS Events: ${raasResult.raisedEvents.map(e => e.type).join(", ") || "None"}`);
-      console.log(`🛡️ FaultHandler FSM: ${faultHandlerState.state.fsm}`);
-
-      // Log for dashboard
       logs.push({
         cycle: i + 1,
         sensorState: sensorState.state.fsm,
-        raasEvents: raasResult.raisedEvents.map((e) => e.type),
+        raasEvents: raasResult.raisedEvents.map(e => e.type),
         faultHandlerState: faultHandlerState.state.fsm,
+        rideC: rideCState.state.fsm,
+        rideD: rideDState.state.fsm,
       });
+
+      // Intermediate write (optional)
+      fs.writeFileSync(
+        fsmLogPath,
+        JSON.stringify({
+          ride_c_state: rideCState.state.fsm,
+          ride_d_state: rideDState.state.fsm,
+          recovery_triggered: rideCState.state.fsm === "RECOVERING" ? 1 : 0
+        }, null, 2)
+      );
+
+      // 🖨️ Console output
+      console.log(`📡 Sensor FSM: ${sensorState.state.fsm}`);
+      console.log(`📡 RaaS Events: ${raasResult.raisedEvents.map(e => e.type).join(", ") || "None"}`);
+      console.log(`🛡️ FaultHandler FSM: ${faultHandlerState.state.fsm}`);
+      console.log(`🛠️ RIDE-C FSM: ${rideCState.state.fsm}`);
+      console.log(`🔁 RIDE-D FSM: ${rideDState.state.fsm}`);
     }
 
+    // ✅ Save all FSM logs to file
     console.log("\n📋 Final Transition Log:");
     console.table(logs);
+    fs.writeFileSync(fsmLogPath, JSON.stringify(logs, null, 2));
+
+    // ✅ Generate graph
+    exec("python visualizations/ride_fsm_plot.py", (err, stdout, stderr) => {
+      if (err) {
+        console.error("❌ FSM plot error:", stderr);
+      } else {
+        console.log("✅ ride_fsm_plot.py executed.\n", stdout);
+      }
+    });
+
     console.log("\n✅ Simulation finished.");
-  },
+  }
 };
 
-// Run directly
+// ✅ Execute if run directly
 if (require.main === module) {
   console.log("🚀 Starting mock-model simulation...");
   example_config.run();

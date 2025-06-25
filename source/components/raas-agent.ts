@@ -7,11 +7,23 @@ import {
   RaiseEventCallBack
 } from "@sorrir/framework";
 
-import { FaultHandlerEventTypes, FaultHandlerPorts } from "./fault-handler";
+import { FaultHandlerEventTypes } from "./fault-handler";
 import * as fs from "fs";
 import * as path from "path";
+import { execSync } from "child_process";
 
-// ✅ Function to read Python-generated anomaly score
+// ✅ FSM States
+enum States {
+  ANALYZING = "ANALYZING",
+  RECOVERING = "RECOVERING",
+}
+
+// ✅ Ports
+export enum RaaSPorts {
+  TO_FAULT_HANDLER = "TO_FAULT_HANDLER",
+}
+
+// ✅ Anomaly Detection Helper
 function checkPythonAnomalyFlag(): boolean {
   try {
     const dataPath = path.resolve("data/outputs/anomaly.json");
@@ -23,43 +35,54 @@ function checkPythonAnomalyFlag(): boolean {
   }
 }
 
-// ✅ FSM definition
-enum States {
-  ANALYZING = "ANALYZING",
-}
-
-export enum RaaSPorts {
-  TO_FAULT_HANDLER = "TO_FAULT_HANDLER",
-}
-
+// ✅ FSM Definition
 export const sm: StateMachine<States, undefined, FaultHandlerEventTypes, RaaSPorts> = {
   transitions: [
     {
       sourceState: States.ANALYZING,
-      targetState: States.ANALYZING,
-      action: (
-        _,
-        raiseEvent: RaiseEventCallBack<FaultHandlerEventTypes, RaaSPorts>
-      ) => {
-        const isAnomaly = checkPythonAnomalyFlag();
-
-        if (isAnomaly) {
+      targetState: States.RECOVERING,
+      action: (_, raiseEvent) => {
+        if (checkPythonAnomalyFlag()) {
           raiseEvent({
             type: FaultHandlerEventTypes.FAULT,
             port: RaaSPorts.TO_FAULT_HANDLER,
             eventClass: "oneway"
           });
-          console.warn("📡 RaaS Agent: Detected anomaly from Python → FAULT raised");
+
+          console.warn("📡 RaaS Agent: Detected anomaly → FAULT raised");
+
+          try {
+            // Restart via WSL-compatible path
+            execSync("bash recover/restart_faulty.sh", {
+              cwd: path.resolve("faulty-app"),
+              stdio: "inherit"
+            });
+            console.log("✅ RaaS Agent: Faulty app restarted.");
+          } catch (err) {
+            console.error("❌ RaaS Agent: Recovery script failed.");
+          }
+
+          fs.appendFileSync("data/outputs/recovery_attempt.log",
+            `Edge recovery triggered at ${new Date().toISOString()}\n`
+          );
         } else {
-          console.log("✅ RaaS Agent: No anomaly, system normal.");
+          console.log("✅ RaaS Agent: No anomaly detected.");
         }
 
         return;
       },
     },
+    {
+      sourceState: States.RECOVERING,
+      targetState: States.ANALYZING,
+      action: () => {
+        console.log("🔁 RaaS Agent: Returning to ANALYZING.");
+      },
+    },
   ],
 };
 
+// ✅ Component Export
 export const raasAgent: AtomicComponent<FaultHandlerEventTypes, RaaSPorts> =
   createStatemachineComponent(
     [
@@ -73,6 +96,7 @@ export const raasAgent: AtomicComponent<FaultHandlerEventTypes, RaaSPorts> =
     "raas-agent"
   );
 
+// ✅ Initial State
 export const raasAgentStartState: StateMachineState<
   States,
   undefined,
