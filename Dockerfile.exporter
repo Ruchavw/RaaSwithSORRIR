@@ -1,0 +1,16 @@
+# Use a slim Python base
+FROM python:3.10-slim
+
+# Set working directory inside container
+WORKDIR /app
+
+# Copy exporter.py and needed folders
+COPY exporter.py ./
+RUN mkdir -p ./data/outputs
+ # Ensure logs are available at startup
+
+# Install Prometheus Python client
+RUN pip install prometheus_client
+
+# Start exporter
+CMD ["python", "exporter.py"]
