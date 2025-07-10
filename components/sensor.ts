@@ -31,7 +31,6 @@ type abstractState = number;
 // ✅ State machine definition
 export const sm: StateMachine<States, abstractState, SensorEventTypes, SensorPorts> = {
   transitions: [
-    //⚠️ Fault transition from NO_CAR
     {
       sourceState: States.NO_CAR,
       targetState: States.FAULTY,
@@ -41,7 +40,6 @@ export const sm: StateMachine<States, abstractState, SensorEventTypes, SensorPor
         return tick;
       },
     },
-    // ⚠️ Fault transition from CAR
     {
       sourceState: States.CAR,
       targetState: States.FAULTY,
@@ -51,7 +49,6 @@ export const sm: StateMachine<States, abstractState, SensorEventTypes, SensorPor
         return tick;
       },
     },
-    // ✅ Normal detection (CAR arrives)
     {
       sourceState: States.NO_CAR,
       targetState: States.CAR,
@@ -60,14 +57,12 @@ export const sm: StateMachine<States, abstractState, SensorEventTypes, SensorPor
         return tick + 1;
       },
     },
-    // ⏱ Stay in CAR up to 3 ticks
     {
       sourceState: States.CAR,
       targetState: States.CAR,
       condition: (tick) => tick <= 3,
       action: (tick) => tick + 1,
     },
-    // ⬅️ Reset to NO_CAR after CAR state ends
     {
       sourceState: States.CAR,
       targetState: States.NO_CAR,
@@ -75,6 +70,16 @@ export const sm: StateMachine<States, abstractState, SensorEventTypes, SensorPor
       action: (tick, raiseEvent) => {
         raiseEvent({ type: SensorEventTypes.NOTHING, port: SensorPorts.TO_DSB, eventClass: "oneway" });
         return 0;
+      },
+    },
+    // ✅ Recovery: FAULTY → CAR if tick >= 0
+    {
+      sourceState: States.FAULTY,
+      targetState: States.CAR,
+      condition: (tick) => tick >= 0,
+      action: (tick, raiseEvent) => {
+        raiseEvent({ type: SensorEventTypes.DETECTION, port: SensorPorts.TO_DSB, eventClass: "oneway" });
+        return tick + 1;
       },
     },
   ],

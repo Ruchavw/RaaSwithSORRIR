@@ -1,6 +1,28 @@
 {
-  "time": 1910,
-  "device": "cam-1",
+  "timestamp": "2025-07-10T03:42:36.120464",
+  "processed_time_range": {
+    "start": 1752118954,
+    "end": 1752118954
+  },
+  "total_records_processed": 7,
+  "anomalies_detected": 1,
   "is_anomaly": true,
-  "anomaly_score": -0.07458488228109539
+  "affected_devices": {
+    "irrigation-controller": "LOW"
+  },
+  "anomaly_details": [
+    {
+      "device": "irrigation-controller",
+      "time": 1752118954,
+      "anomaly_score": -0.021326967580187595,
+      "cpu": 87.88,
+      "ram": 68.56,
+      "severity": "LOW"
+    }
+  ],
+  "summary": {
+    "anomaly_rate": 14.29,
+    "devices_affected": 1,
+    "high_severity_count": 0
+  }
 }

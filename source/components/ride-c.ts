@@ -1,10 +1,10 @@
+// ride-c.ts
 import {
   AtomicComponent,
   createStatemachineComponent,
   StateMachine,
   StateMachineState,
   RaiseEventCallBack,
-  OneWayEvent,
 } from "@sorrir/framework";
 
 export enum RideCPorts {
@@ -21,7 +21,6 @@ enum RideCStates {
   RECOVERING = "RECOVERING",
 }
 
-// Simulated healthy paths
 const healthyPaths = new Set<string>(["path-A", "path-B", "path-C"]);
 
 export const sm: StateMachine<RideCStates, { paths: string[] }, RideCEventTypes, RideCPorts> = {
@@ -30,18 +29,14 @@ export const sm: StateMachine<RideCStates, { paths: string[] }, RideCEventTypes,
       sourceState: RideCStates.MONITOR,
       targetState: RideCStates.RECOVERING,
       event: ["oneway", RideCEventTypes.FAULT, undefined],
-
       action: (my, raiseEvent) => {
-        // Simulate smart casting
         const goodPaths = Array.from(healthyPaths);
 
         raiseEvent({
           type: RideCEventTypes.RECOVERY,
           port: RideCPorts.TO_RIDE_D,
           eventClass: "oneway",
-          payload: {
-            suggestedPaths: goodPaths,
-          },
+          payload: { suggestedPaths: goodPaths },
         });
 
         console.log("📡 RIDE-C: Suggested good paths →", goodPaths);
@@ -53,6 +48,7 @@ export const sm: StateMachine<RideCStates, { paths: string[] }, RideCEventTypes,
     {
       sourceState: RideCStates.RECOVERING,
       targetState: RideCStates.MONITOR,
+      // Passive reset after a cycle
     },
   ],
 };

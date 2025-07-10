@@ -1,0 +1,182 @@
+[
+  {
+    "cycle": 1,
+    "sensors": "cam-1:ACTIVE | cam-2:ACTIVE | cloud:ACTIVE | fog-0:ACTIVE | irrigation-controller:ACTIVE | soil-sensor-node:ACTIVE | signal-monitor:FAULTY",
+    "raasEvents": [
+      "FAULT"
+    ],
+    "faultHandler": "MONITORING",
+    "rideC": "RECOVERING",
+    "rideD": "REROUTING"
+  },
+  {
+    "cycle": 2,
+    "sensors": "cam-1:ACTIVE | cam-2:FAULTY | cloud:ACTIVE | fog-0:FAULTY | irrigation-controller:FAULTY | soil-sensor-node:ACTIVE | signal-monitor:FAULTY",
+    "raasEvents": [],
+    "faultHandler": "MONITORING",
+    "rideC": "RECOVERING",
+    "rideD": "FORWARDING"
+  },
+  {
+    "cycle": 3,
+    "sensors": "cam-1:ACTIVE | cam-2:FAULTY | cloud:FAULTY | fog-0:FAULTY | irrigation-controller:FAULTY | soil-sensor-node:ACTIVE | signal-monitor:FAULTY",
+    "raasEvents": [
+      "FAULT"
+    ],
+    "faultHandler": "MONITORING",
+    "rideC": "MONITOR",
+    "rideD": "FORWARDING"
+  },
+  {
+    "cycle": 4,
+    "sensors": "cam-1:FAULTY | cam-2:FAULTY | cloud:FAULTY | fog-0:FAULTY | irrigation-controller:FAULTY | soil-sensor-node:ACTIVE | signal-monitor:FAULTY",
+    "raasEvents": [],
+    "faultHandler": "MONITORING",
+    "rideC": "RECOVERING",
+    "rideD": "FORWARDING"
+  },
+  {
+    "cycle": 5,
+    "sensors": "cam-1:FAULTY | cam-2:FAULTY | cloud:FAULTY | fog-0:FAULTY | irrigation-controller:FAULTY | soil-sensor-node:INACTIVE | signal-monitor:FAULTY",
+    "raasEvents": [
+      "FAULT"
+    ],
+    "faultHandler": "MONITORING",
+    "rideC": "RECOVERING",
+    "rideD": "REROUTING"
+  },
+  {
+    "cycle": 6,
+    "sensors": "cam-1:FAULTY | cam-2:FAULTY | cloud:FAULTY | fog-0:FAULTY | irrigation-controller:FAULTY | soil-sensor-node:ACTIVE | signal-monitor:FAULTY",
+    "raasEvents": [],
+    "faultHandler": "MONITORING",
+    "rideC": "MONITOR",
+    "rideD": "FORWARDING"
+  },
+  {
+    "cycle": 7,
+    "sensors": "cam-1:FAULTY | cam-2:FAULTY | cloud:FAULTY | fog-0:FAULTY | irrigation-controller:FAULTY | soil-sensor-node:ACTIVE | signal-monitor:FAULTY",
+    "raasEvents": [
+      "FAULT"
+    ],
+    "faultHandler": "MONITORING",
+    "rideC": "RECOVERING",
+    "rideD": "FORWARDING"
+  },
+  {
+    "cycle": 8,
+    "sensors": "cam-1:FAULTY | cam-2:FAULTY | cloud:FAULTY | fog-0:FAULTY | irrigation-controller:FAULTY | soil-sensor-node:ACTIVE | signal-monitor:FAULTY",
+    "raasEvents": [],
+    "faultHandler": "MONITORING",
+    "rideC": "RECOVERING",
+    "rideD": "REROUTING"
+  },
+  {
+    "cycle": 9,
+    "sensors": "cam-1:FAULTY | cam-2:FAULTY | cloud:FAULTY | fog-0:FAULTY | irrigation-controller:FAULTY | soil-sensor-node:ACTIVE | signal-monitor:FAULTY",
+    "raasEvents": [
+      "FAULT"
+    ],
+    "faultHandler": "MONITORING",
+    "rideC": "MONITOR",
+    "rideD": "FORWARDING"
+  },
+  {
+    "cycle": 10,
+    "sensors": "cam-1:FAULTY | cam-2:FAULTY | cloud:FAULTY | fog-0:FAULTY | irrigation-controller:FAULTY | soil-sensor-node:INACTIVE | signal-monitor:FAULTY",
+    "raasEvents": [],
+    "faultHandler": "MONITORING",
+    "rideC": "RECOVERING",
+    "rideD": "FORWARDING"
+  },
+  {
+    "cycle": 11,
+    "sensors": "cam-1:FAULTY | cam-2:FAULTY | cloud:FAULTY | fog-0:FAULTY | irrigation-controller:FAULTY | soil-sensor-node:ACTIVE | signal-monitor:FAULTY",
+    "raasEvents": [
+      "FAULT"
+    ],
+    "faultHandler": "MONITORING",
+    "rideC": "RECOVERING",
+    "rideD": "REROUTING"
+  },
+  {
+    "cycle": 12,
+    "sensors": "cam-1:FAULTY | cam-2:FAULTY | cloud:FAULTY | fog-0:FAULTY | irrigation-controller:FAULTY | soil-sensor-node:ACTIVE | signal-monitor:FAULTY",
+    "raasEvents": [],
+    "faultHandler": "MONITORING",
+    "rideC": "MONITOR",
+    "rideD": "FORWARDING"
+  },
+  {
+    "cycle": 13,
+    "sensors": "cam-1:FAULTY | cam-2:FAULTY | cloud:FAULTY | fog-0:FAULTY | irrigation-controller:FAULTY | soil-sensor-node:ACTIVE | signal-monitor:FAULTY",
+    "raasEvents": [
+      "FAULT"
+    ],
+    "faultHandler": "MONITORING",
+    "rideC": "RECOVERING",
+    "rideD": "FORWARDING"
+  },
+  {
+    "cycle": 14,
+    "sensors": "cam-1:FAULTY | cam-2:FAULTY | cloud:FAULTY | fog-0:FAULTY | irrigation-controller:FAULTY | soil-sensor-node:ACTIVE | signal-monitor:FAULTY",
+    "raasEvents": [],
+    "faultHandler": "MONITORING",
+    "rideC": "RECOVERING",
+    "rideD": "REROUTING"
+  },
+  {
+    "cycle": 15,
+    "sensors": "cam-1:FAULTY | cam-2:FAULTY | cloud:FAULTY | fog-0:FAULTY | irrigation-controller:FAULTY | soil-sensor-node:INACTIVE | signal-monitor:FAULTY",
+    "raasEvents": [
+      "FAULT"
+    ],
+    "faultHandler": "MONITORING",
+    "rideC": "MONITOR",
+    "rideD": "FORWARDING"
+  },
+  {
+    "cycle": 16,
+    "sensors": "cam-1:FAULTY | cam-2:FAULTY | cloud:FAULTY | fog-0:FAULTY | irrigation-controller:FAULTY | soil-sensor-node:ACTIVE | signal-monitor:FAULTY",
+    "raasEvents": [],
+    "faultHandler": "MONITORING",
+    "rideC": "RECOVERING",
+    "rideD": "FORWARDING"
+  },
+  {
+    "cycle": 17,
+    "sensors": "cam-1:FAULTY | cam-2:FAULTY | cloud:FAULTY | fog-0:FAULTY | irrigation-controller:FAULTY | soil-sensor-node:FAULTY | signal-monitor:FAULTY",
+    "raasEvents": [
+      "FAULT"
+    ],
+    "faultHandler": "MONITORING",
+    "rideC": "RECOVERING",
+    "rideD": "REROUTING"
+  },
+  {
+    "cycle": 18,
+    "sensors": "cam-1:FAULTY | cam-2:FAULTY | cloud:FAULTY | fog-0:FAULTY | irrigation-controller:FAULTY | soil-sensor-node:FAULTY | signal-monitor:FAULTY",
+    "raasEvents": [],
+    "faultHandler": "MONITORING",
+    "rideC": "MONITOR",
+    "rideD": "FORWARDING"
+  },
+  {
+    "cycle": 19,
+    "sensors": "cam-1:FAULTY | cam-2:FAULTY | cloud:FAULTY | fog-0:FAULTY | irrigation-controller:FAULTY | soil-sensor-node:FAULTY | signal-monitor:FAULTY",
+    "raasEvents": [
+      "FAULT"
+    ],
+    "faultHandler": "MONITORING",
+    "rideC": "RECOVERING",
+    "rideD": "FORWARDING"
+  },
+  {
+    "cycle": 20,
+    "sensors": "cam-1:FAULTY | cam-2:FAULTY | cloud:FAULTY | fog-0:FAULTY | irrigation-controller:FAULTY | soil-sensor-node:FAULTY | signal-monitor:FAULTY",
+    "raasEvents": [],
+    "faultHandler": "MONITORING",
+    "rideC": "RECOVERING",
+    "rideD": "REROUTING"
+  }
+]

@@ -14,7 +14,7 @@ app.get('/health', (req, res) => {
 app.get('/simulate', (req, res) => {
   const roll = Math.random();
   if (roll < 0.2) {
-    console.log("💥 Crashing...");
+    console.log("🔁 Simulating CPU spike...");
     process.exit(1);
   } else if (roll < 0.5) {
     console.log("🐢 Delaying...");
@@ -28,7 +28,7 @@ app.get('/simulate', (req, res) => {
 
 // CPU spike simulation
 app.get('/cpu', (req, res) => {
-  console.log("🔁 Simulating CPU spike...");
+  console.log("💥 Crashing...");
   const start = Date.now();
   while (Date.now() - start < 10000); // spin for 10 seconds
   res.send('CPU spike complete');

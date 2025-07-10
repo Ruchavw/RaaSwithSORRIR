@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   faulty-app:
     build:
@@ -5,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: faulty-app
     ports:
-      - "3100:3000"
+      - "3000:3000"
     volumes:
       - ./data/outputs:/app/data/outputs
     command: ["node", "server.js"]
@@ -14,15 +16,31 @@ services:
   prometheus:
     image: prom/prometheus
     container_name: prometheus
-    volumes:
-      - ./prometheus:/etc/prometheus
     ports:
       - "9090:9090"
+    volumes:
+      - ./prometheus:/etc/prometheus
     restart: always
 
   grafana:
     image: grafana/grafana
     container_name: grafana
     ports:
-      - "3030:3000"
+      - "3100:3100"
     restart: always
+    volumes:
+      - grafana-storage:/var/lib/grafana
+
+  exporter:
+    build:
+      context: .
+      dockerfile: Dockerfile.exporter
+    container_name: exporter
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data/outputs:/app/data/outputs
+    restart: always
+
+volumes:
+  grafana-storage:
