@@ -1,0 +1,494 @@
+[
+  {
+    "timestamp": 1752723957908,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752723957908,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752724392268,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752724392268,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752724600088,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752724600088,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752724659030,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752724659029,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752724932085,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752724932085,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752725185411,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752725185411,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752725729665,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752725729665,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752726870046,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752726870045,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752727255399,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752727255399,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752727861418,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752727861418,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752733296817,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752733296817,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752733306827,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752733296817,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752733316841,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752733296817,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752733326847,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752733296817,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752733336854,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752733296817,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752733346868,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752733296817,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752733356881,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752733296817,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752733688235,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752733688235,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752733698249,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752733688235,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752733708254,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752733688235,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752733718269,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752733688235,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752733728285,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752733688235,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752733738289,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752733688235,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752733748293,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752733688235,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752733758307,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752733688235,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752733768322,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752733688235,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752733778335,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752733688235,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752733788348,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752733688235,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752744987655,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752744987655,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752745007789,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752744987655,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752746219800,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752746219799,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752746249892,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752746219799,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752746279935,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752746219799,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752746310007,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752746219799,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752746320021,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752746219799,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752746330045,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752746219799,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752746340065,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752746219799,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752746390145,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752746219799,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752746430209,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752746219799,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752746440235,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752746219799,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  },
+  {
+    "timestamp": 1752746470289,
+    "state": "COMPLETE",
+    "details": {
+      "currentPhase": "COMPLETE",
+      "lastDecision": "RECOVER",
+      "recoveryAttempts": 1,
+      "lastRecoveryTime": 1752746219799,
+      "bftConsensusActive": false,
+      "targetContainer": "faulty-app"
+    }
+  }
+]

@@ -9,7 +9,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./data/outputs:/app/data/outputs
+      - crash-data:/tmp
     command: ["node", "server.js"]
     restart: always
 
@@ -44,3 +44,4 @@ services:
 
 volumes:
   grafana-storage:
+  crash-data:

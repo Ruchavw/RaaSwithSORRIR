@@ -1,97 +1,145 @@
 const express = require('express');
+const fs = require('fs');
 const app = express();
-const port = 3000;
+app.use(express.json());
 
-let memoryLeak = [];
-let resourceLock = false;
+const PORT = 3000;
 
-// Simulate health check
+// Crash tracking file
+const crashCountFile = '/tmp/crash-count.json';
+
+function readCrashCount() {
+  try {
+    const raw = fs.readFileSync(crashCountFile);
+    return JSON.parse(raw).count || 0;
+  } catch {
+    return 0;
+  }
+}
+
+function writeCrashCount(count) {
+  fs.writeFileSync(crashCountFile, JSON.stringify({ count }));
+}
+
+// Initialize crash count from file
+let crashCount = readCrashCount();
+
+// Simulated app state
+let memoryLeakSize = 0;
+let refreshTimer;
+let pid = process.pid;
+let uptimeStart = Date.now();
+let status = 'OK';
+
+// Random auto-refresh every 8–12 seconds
+function scheduleAutoRefresh() {
+  const delay = Math.floor(Math.random() * 4000) + 8000;
+  refreshTimer = setTimeout(() => {
+    const scenarios = ['success', 'crashing', 'leaky_success', 'cleanup'];
+    const chosen = scenarios[Math.floor(Math.random() * scenarios.length)];
+
+    switch (chosen) {
+      case 'crashing':
+        crashCount++;
+        writeCrashCount(crashCount);
+        console.log("💥 Simulated crash. Exiting...");
+        process.exit(1);
+        break;
+      case 'leaky_success':
+        memoryLeakSize += 5;
+        status = 'degraded';
+        console.log(`🕳️ Simulated memory leak. Total = ${memoryLeakSize}MB`);
+        break;
+      case 'cleanup':
+        memoryLeakSize = 0;
+        status = 'OK';
+        console.log("🧹 Cleaned up memory leak.");
+        break;
+      default:
+        status = 'OK';
+        console.log("✅ Normal operation.");
+    }
+
+    scheduleAutoRefresh(); // reschedule
+  }, delay);
+}
+
+scheduleAutoRefresh();
+
+// Health endpoint
 app.get('/health', (req, res) => {
-  res.send('OK');
+  res.json({
+    status,
+    crashCount,
+    memoryLeakSize,
+    memoryUsage: process.memoryUsage(),
+    uptime: Math.floor((Date.now() - uptimeStart) / 1000),
+    pid,
+    timestamp: Date.now(),
+  });
 });
 
-// Simulate random crash, delay, or memory leak
-app.get('/simulate', (req, res) => {
-  const roll = Math.random();
-  if (roll < 0.2) {
-    console.log("🔁 Simulating CPU spike...");
-    process.exit(1);
-  } else if (roll < 0.5) {
-    console.log("🐢 Delaying...");
-    setTimeout(() => res.send('Delayed response'), 10000);
-  } else {
-    memoryLeak.push(Buffer.alloc(10 ** 6, 'leak'));
-    console.log("🐍 Leaky success...");
-    res.send('Leaky success');
+// Simulate fault manually
+app.post('/simulate', (req, res) => {
+  const scenario = req.body.scenario || 'success';
+  let response = {};
+
+  switch (scenario) {
+    case 'crashing':
+      crashCount++;
+      writeCrashCount(crashCount);
+      response = {
+        status: 'crashing',
+        message: 'Application is crashing',
+        requestId: Math.random().toString(36).slice(7),
+        crashCount,
+      };
+      console.log("💥 Manual crash simulation.");
+      res.json(response);
+      return process.exit(1);
+
+    case 'leaky_success':
+      memoryLeakSize += 5;
+      status = 'degraded';
+      response = {
+        status: 'leaky_success',
+        message: 'Success with memory leak',
+        requestId: Math.random().toString(36).slice(7),
+        leakAdded: 5,
+        totalLeak: memoryLeakSize,
+        timestamp: Date.now(),
+      };
+      console.log("🕳️ Manual memory leak.");
+      return res.json(response);
+
+    default:
+      status = 'OK';
+      response = {
+        status: 'success',
+        message: 'Normal operation',
+        requestId: Math.random().toString(36).slice(7),
+        timestamp: Date.now(),
+      };
+      console.log("✅ Manual simulate success.");
+      return res.json(response);
   }
 });
 
-// CPU spike simulation
-app.get('/cpu', (req, res) => {
-  console.log("💥 Crashing...");
-  const start = Date.now();
-  while (Date.now() - start < 10000); // spin for 10 seconds
-  res.send('CPU spike complete');
+// Recovery endpoint
+app.post('/recover', (req, res) => {
+  memoryLeakSize = 0;
+  status = 'OK';
+  crashCount = 0;
+  writeCrashCount(crashCount);
+  console.log("🔧 Recovery logic triggered.");
+  res.json({
+    status: 'recovered',
+    message: 'Recovery executed',
+    timestamp: Date.now(),
+  });
 });
 
-// Memory exhaustion
-app.get('/memory', (req, res) => {
-  console.log("🧠 Exhausting memory...");
-  for (let i = 0; i < 100; i++) {
-    memoryLeak.push(Buffer.alloc(5 * 10 ** 6)); // 5MB chunks
-  }
-  res.send('Memory being consumed');
+app.listen(PORT, () => {
+  console.log(`🧠 Faulty app running on port ${PORT}`);
 });
 
-// Deadlock simulation
-app.get('/deadlock', (req, res) => {
-  console.log("🔒 Simulating deadlock...");
-  if (resourceLock) {
-    return res.send('Resource already locked. Waiting...');
-  }
-  resourceLock = true;
-  setTimeout(() => {
-    resourceLock = false;
-    console.log("🔓 Deadlock released");
-  }, 30000); // lock held for 30 seconds
-  res.send('Resource locked. Deadlock in progress.');
-});
-
-// Panic simulation
-app.get('/panic', (req, res) => {
-  console.log("🛑 Throwing uncaught exception...");
-  throw new Error("Simulated panic: uncaught exception");
-});
-
-// Silent failure
-app.get('/silent', (req, res) => {
-  console.log("🕯️ Silent failure...");
-  res.status(200).send(); // 200 OK with no content
-});
-
-// Resource starvation (simulate with open files or sockets — here we simulate with delay and loop)
-app.get('/starve', (req, res) => {
-  console.log("🧊 Simulating resource starvation...");
-  setTimeout(() => {
-    res.send('Starved for resources...');
-  }, 20000); // long delay
-});
-
-// Redirect on root `/` to a random fault
-app.get('/', (req, res) => {
-  const routes = ['/simulate', '/cpu', '/memory', '/deadlock', '/panic', '/silent', '/starve'];
-  const selected = routes[Math.floor(Math.random() * routes.length)];
-  console.log(`🔁 Redirecting to: ${selected}`);
-  res.setHeader("X-Fault-Simulated", selected);
-  res.redirect(selected);
-});
-
-// Global error handler to prevent crash on panic
-app.use((err, req, res, next) => {
-  console.error("🔥 Uncaught error:", err.message);
-  res.status(500).send("Server panicked but caught globally.");
-});
-
-app.listen(port, () => {
-  console.log(`🛠️ Faulty IoT App running at http://localhost:${port}`);
-});
