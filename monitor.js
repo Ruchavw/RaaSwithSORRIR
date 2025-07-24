@@ -1,4 +1,4 @@
-// monitor.js
+const { logMetrics } = require('./utils/metricsLogger');
 const { SorrirBFTRecoveryOrchestrator } = require('./sorrir_bft_integration.js');
 const orchestrator = new SorrirBFTRecoveryOrchestrator();
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
@@ -9,6 +9,20 @@ let cycle = 1;
 let previousCrashCount = 0;
 let lastRestartTime = 0;
 const cooldownMs = 10000; // 10 seconds
+
+function logCrashMetrics() {
+  const taskId = `crash-${Date.now()}`;
+  const responseTime = 0;
+  const sloViolated = 1;
+  const decisionTime = 0;
+  const memoryUsed = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2);
+  const uptimeSeconds = process.uptime();
+  const cpuUsagePercent = 25;
+  const energy = (cpuUsagePercent * uptimeSeconds * 0.000277).toFixed(4);
+
+  console.log("📊 Crash detected — logging metrics...");
+  logMetrics({ taskId, responseTime, sloViolated, decisionTime, memoryUsed, energy });
+}
 
 process.on('SIGINT', () => {
   console.log('\n🛑 Received Ctrl+C. Stopping monitoring gracefully...');
@@ -24,7 +38,7 @@ process.on('SIGINT', () => {
     // Skip probing if still cooling down
     if (now - lastRestartTime < cooldownMs) {
       console.log("🧘 Cooldown in progress... Skipping this cycle.\n");
-      await new Promise(res => setTimeout(res, 1000)); // wait 1s before retry loop
+      await new Promise(res => setTimeout(res, 1000));
       continue;
     }
 
@@ -40,6 +54,8 @@ process.on('SIGINT', () => {
         console.log(`💥 Crash detected (crashCount increased to ${crashCount}) — Restarting container...`);
         previousCrashCount = crashCount;
         lastRestartTime = now;
+
+        logCrashMetrics(); // Log before restarting
 
         exec('docker restart faulty-app', (err, stdout, stderr) => {
           if (err) console.error(`❌ Restart failed: ${stderr}`);
@@ -62,6 +78,8 @@ process.on('SIGINT', () => {
       console.error(`🚫 App unreachable — forcing container restart.`);
       lastRestartTime = now;
 
+      logCrashMetrics(); // Log unreachable crash
+
       exec('docker restart faulty-app', (err, stdout, stderr) => {
         if (err) console.error(`❌ Restart failed: ${stderr}`);
         else console.log(`🔁 Container restarted due to unreachability.\n`);
@@ -70,7 +88,7 @@ process.on('SIGINT', () => {
 
     cycle++;
     console.log(`⏳ Waiting before next cycle...\n`);
-    await new Promise(res => setTimeout(res, 10000)); // wait 10s between cycles
+    await new Promise(res => setTimeout(res, 10000));
   }
 
   console.log("✅ Monitor stopped cleanly.");

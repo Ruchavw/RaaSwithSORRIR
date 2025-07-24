@@ -63,9 +63,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SorrirBFTRecoveryOrchestrator = exports.bftRecoveryFSM = exports.bftRecoveryStartState = void 0;
+// sorrir_bft_integration.ts
+var logMetrics = require('./utils/metricsLogger').logMetrics;
 var bft_recovery_integration_1 = require("./bft_recovery_integration");
 var uuid_1 = require("uuid");
 var fs = require("fs");
+// SLO Deadline for recovery (in ms)
+var SLO_DEADLINE = 2000;
 exports.bftRecoveryStartState = {
     state: {
         fsm: "MONITORING",
@@ -75,11 +79,11 @@ exports.bftRecoveryStartState = {
             recoveryAttempts: 0,
             lastRecoveryTime: 0,
             bftConsensusActive: false,
-            targetContainer: "faulty-app"
-        }
+            targetContainer: "faulty-app",
+        },
     },
     events: [],
-    tsType: "State"
+    tsType: "State",
 };
 exports.bftRecoveryFSM = {
     transitions: [
@@ -90,7 +94,7 @@ exports.bftRecoveryFSM = {
             action: function (state, raiseEvent, incomingEvent) {
                 var _a;
                 return (__assign(__assign({}, state), { currentPhase: "ANALYZING", targetContainer: ((_a = incomingEvent === null || incomingEvent === void 0 ? void 0 : incomingEvent.payload) === null || _a === void 0 ? void 0 : _a.containerName) || "faulty-app" }));
-            }
+            },
         },
         {
             sourceState: "ANALYZING",
@@ -99,13 +103,13 @@ exports.bftRecoveryFSM = {
             action: function (state, raiseEvent, incomingEvent) {
                 var _a;
                 return (__assign(__assign({}, state), { currentPhase: "RECOVERING", lastDecision: ((_a = incomingEvent === null || incomingEvent === void 0 ? void 0 : incomingEvent.payload) === null || _a === void 0 ? void 0 : _a.decision) || "RECOVER", bftConsensusActive: true, recoveryAttempts: state.recoveryAttempts + 1 }));
-            }
+            },
         },
         {
             sourceState: "RECOVERING",
             event: ["oneway", "RECOVERY_COMPLETE", undefined],
             targetState: "VERIFYING",
-            action: function (state) { return (__assign(__assign({}, state), { currentPhase: "VERIFYING", lastRecoveryTime: Date.now() })); }
+            action: function (state) { return (__assign(__assign({}, state), { currentPhase: "VERIFYING", lastRecoveryTime: Date.now() })); },
         },
         {
             sourceState: "VERIFYING",
@@ -116,24 +120,24 @@ exports.bftRecoveryFSM = {
                     id: (0, uuid_1.v4)(),
                     eventClass: "oneway",
                     type: "RECOVERY_SUCCESS",
-                    port: "recovery-complete"
+                    port: "recovery-complete",
                 });
                 return __assign(__assign({}, state), { currentPhase: "COMPLETE", bftConsensusActive: false });
-            }
+            },
         },
         {
             sourceState: "VERIFYING",
             event: ["oneway", "VERIFICATION_FAILED", undefined],
             targetState: "ANALYZING",
-            action: function (state) { return (__assign(__assign({}, state), { currentPhase: "ANALYZING", bftConsensusActive: false })); }
+            action: function (state) { return (__assign(__assign({}, state), { currentPhase: "ANALYZING", bftConsensusActive: false })); },
         },
         {
             sourceState: "COMPLETE",
             event: ["oneway", "RESET_MONITOR", undefined],
             targetState: "MONITORING",
-            action: function (state) { return (__assign(__assign({}, state), { currentPhase: "MONITORING", lastDecision: null, bftConsensusActive: false })); }
-        }
-    ]
+            action: function (state) { return (__assign(__assign({}, state), { currentPhase: "MONITORING", lastDecision: null, bftConsensusActive: false })); },
+        },
+    ],
 };
 var SorrirBFTRecoveryOrchestrator = /** @class */ (function (_super) {
     __extends(SorrirBFTRecoveryOrchestrator, _super);
@@ -149,9 +153,10 @@ var SorrirBFTRecoveryOrchestrator = /** @class */ (function (_super) {
         var raisedEvents = [];
         var transition = exports.bftRecoveryFSM.transitions.find(function (t) {
             return t.sourceState === _this.sorrirState.state.fsm &&
-                (!t.event || (t.event[0] === (incomingEvent === null || incomingEvent === void 0 ? void 0 : incomingEvent.eventClass) &&
-                    t.event[1] === (incomingEvent === null || incomingEvent === void 0 ? void 0 : incomingEvent.type) &&
-                    t.event[2] === (incomingEvent === null || incomingEvent === void 0 ? void 0 : incomingEvent.port)));
+                (!t.event ||
+                    (t.event[0] === (incomingEvent === null || incomingEvent === void 0 ? void 0 : incomingEvent.eventClass) &&
+                        t.event[1] === (incomingEvent === null || incomingEvent === void 0 ? void 0 : incomingEvent.type) &&
+                        t.event[2] === (incomingEvent === null || incomingEvent === void 0 ? void 0 : incomingEvent.port)));
         });
         if (transition) {
             var newMy = transition.action
@@ -160,26 +165,28 @@ var SorrirBFTRecoveryOrchestrator = /** @class */ (function (_super) {
             this.sorrirState = {
                 state: {
                     fsm: transition.targetState,
-                    my: newMy
+                    my: newMy,
                 },
                 events: raisedEvents,
-                tsType: "State"
+                tsType: "State",
             };
             (_a = this.eventQueue).push.apply(_a, raisedEvents);
         }
     };
     SorrirBFTRecoveryOrchestrator.prototype.invokeSorrirBFTRecovery = function () {
         return __awaiter(this, arguments, void 0, function (container) {
-            var health, decision, isHealthy, error_1;
+            var taskId, detectTime, health, decision, isHealthy, recoverTime, decisionTime, responseTime, sloViolated, memoryUsed, uptimeSeconds, cpuUsagePercent, energy, error_1;
             if (container === void 0) { container = "faulty-app"; }
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        taskId = "sorrir-bft-".concat(Date.now());
+                        detectTime = Date.now();
                         this.runSorrirTransition({
                             id: (0, uuid_1.v4)(),
                             eventClass: "oneway",
                             type: "FAULT_DETECTED",
-                            port: undefined
+                            port: undefined,
                         });
                         _a.label = 1;
                     case 1:
@@ -194,7 +201,7 @@ var SorrirBFTRecoveryOrchestrator = /** @class */ (function (_super) {
                             id: (0, uuid_1.v4)(),
                             eventClass: "oneway",
                             type: "BFT_CONSENSUS_COMPLETE",
-                            port: undefined
+                            port: undefined,
                         });
                         return [4 /*yield*/, this.executeRecovery(decision, container)];
                     case 4:
@@ -203,7 +210,7 @@ var SorrirBFTRecoveryOrchestrator = /** @class */ (function (_super) {
                             id: (0, uuid_1.v4)(),
                             eventClass: "oneway",
                             type: "RECOVERY_COMPLETE",
-                            port: undefined
+                            port: undefined,
                         });
                         return [4 /*yield*/, this.testFaultyApp()];
                     case 5:
@@ -212,7 +219,31 @@ var SorrirBFTRecoveryOrchestrator = /** @class */ (function (_super) {
                             id: (0, uuid_1.v4)(),
                             eventClass: "oneway",
                             type: isHealthy ? "VERIFICATION_SUCCESS" : "VERIFICATION_FAILED",
-                            port: undefined
+                            port: undefined,
+                        });
+                        recoverTime = Date.now();
+                        decisionTime = recoverTime - detectTime;
+                        responseTime = decisionTime;
+                        sloViolated = responseTime > SLO_DEADLINE ? 1 : 0;
+                        memoryUsed = process.memoryUsage().heapUsed / 1024 / 1024;
+                        uptimeSeconds = process.uptime();
+                        cpuUsagePercent = 25;
+                        energy = cpuUsagePercent * uptimeSeconds * 0.000277;
+                        console.log("📊 Calling logMetrics with:", {
+                            taskId: taskId,
+                            responseTime: responseTime,
+                            sloViolated: sloViolated,
+                            decisionTime: decisionTime,
+                            memoryUsed: memoryUsed.toFixed(2),
+                            energy: energy.toFixed(4),
+                        });
+                        logMetrics({
+                            taskId: taskId,
+                            responseTime: responseTime,
+                            sloViolated: sloViolated,
+                            decisionTime: decisionTime,
+                            memoryUsed: memoryUsed.toFixed(2),
+                            energy: energy.toFixed(4),
                         });
                         return [4 /*yield*/, this.notifyCloudCoordinator(decision, container, { healthy: isHealthy })];
                     case 6:
@@ -226,7 +257,7 @@ var SorrirBFTRecoveryOrchestrator = /** @class */ (function (_super) {
                             id: (0, uuid_1.v4)(),
                             eventClass: "oneway",
                             type: "VERIFICATION_FAILED",
-                            port: undefined
+                            port: undefined,
                         });
                         return [3 /*break*/, 8];
                     case 8: return [2 /*return*/];
@@ -238,7 +269,7 @@ var SorrirBFTRecoveryOrchestrator = /** @class */ (function (_super) {
         var entry = {
             timestamp: Date.now(),
             state: this.sorrirState.state.fsm,
-            details: this.sorrirState.state.my
+            details: this.sorrirState.state.my,
         };
         var path = "./data/outputs/sorrir_bft_state.json";
         var current = fs.existsSync(path)
@@ -252,7 +283,7 @@ var SorrirBFTRecoveryOrchestrator = /** @class */ (function (_super) {
             id: (0, uuid_1.v4)(),
             eventClass: "oneway",
             type: "RESET_MONITOR",
-            port: undefined
+            port: undefined,
         });
     };
     SorrirBFTRecoveryOrchestrator.prototype.getSorrirState = function () {
@@ -300,5 +331,5 @@ var SorrirBFTRecoveryOrchestrator = /** @class */ (function (_super) {
 exports.SorrirBFTRecoveryOrchestrator = SorrirBFTRecoveryOrchestrator;
 if (require.main === module) {
     var runner = new SorrirBFTRecoveryOrchestrator();
-    runner.invokeSorrirBFTRecovery().catch(console.error);
+    runner.invokeSorrirBFTRecovery;
 }

@@ -1,15 +1,14 @@
+// sorrir_bft_integration.ts
+const { logMetrics } = require('./utils/metricsLogger');
 import { BFTRecovery } from "./bft_recovery_integration";
 import { StateMachineState, OneWayEvent } from "@sorrir/framework";
 import { v4 as uuidv4 } from "uuid";
 import * as fs from "fs";
 
-// Custom FSM phase definition
-type FSMPhase =
-  | "MONITORING"
-  | "ANALYZING"
-  | "RECOVERING"
-  | "VERIFYING"
-  | "COMPLETE";
+// SLO Deadline for recovery (in ms)
+const SLO_DEADLINE = 2000;
+
+type FSMPhase = "MONITORING" | "ANALYZING" | "RECOVERING" | "VERIFYING" | "COMPLETE";
 
 export interface BFTRecoveryState {
   currentPhase: FSMPhase;
@@ -47,11 +46,7 @@ export const bftRecoveryFSM = {
       sourceState: "MONITORING",
       event: ["oneway", "FAULT_DETECTED", undefined],
       targetState: "ANALYZING",
-      action: (
-        state: BFTRecoveryState,
-        raiseEvent: any,
-        incomingEvent: any
-      ) => ({
+      action: (state, raiseEvent, incomingEvent) => ({
         ...state,
         currentPhase: "ANALYZING",
         targetContainer: incomingEvent?.payload?.containerName || "faulty-app",
@@ -61,11 +56,7 @@ export const bftRecoveryFSM = {
       sourceState: "ANALYZING",
       event: ["oneway", "BFT_CONSENSUS_COMPLETE", undefined],
       targetState: "RECOVERING",
-      action: (
-        state: BFTRecoveryState,
-        raiseEvent: any,
-        incomingEvent: any
-      ) => ({
+      action: (state, raiseEvent, incomingEvent) => ({
         ...state,
         currentPhase: "RECOVERING",
         lastDecision: incomingEvent?.payload?.decision || "RECOVER",
@@ -77,7 +68,7 @@ export const bftRecoveryFSM = {
       sourceState: "RECOVERING",
       event: ["oneway", "RECOVERY_COMPLETE", undefined],
       targetState: "VERIFYING",
-      action: (state: BFTRecoveryState) => ({
+      action: (state) => ({
         ...state,
         currentPhase: "VERIFYING",
         lastRecoveryTime: Date.now(),
@@ -87,7 +78,7 @@ export const bftRecoveryFSM = {
       sourceState: "VERIFYING",
       event: ["oneway", "VERIFICATION_SUCCESS", undefined],
       targetState: "COMPLETE",
-      action: (state: BFTRecoveryState, raiseEvent: any) => {
+      action: (state, raiseEvent) => {
         raiseEvent({
           id: uuidv4(),
           eventClass: "oneway",
@@ -105,7 +96,7 @@ export const bftRecoveryFSM = {
       sourceState: "VERIFYING",
       event: ["oneway", "VERIFICATION_FAILED", undefined],
       targetState: "ANALYZING",
-      action: (state: BFTRecoveryState) => ({
+      action: (state) => ({
         ...state,
         currentPhase: "ANALYZING",
         bftConsensusActive: false,
@@ -115,7 +106,7 @@ export const bftRecoveryFSM = {
       sourceState: "COMPLETE",
       event: ["oneway", "RESET_MONITOR", undefined],
       targetState: "MONITORING",
-      action: (state: BFTRecoveryState) => ({
+      action: (state) => ({
         ...state,
         currentPhase: "MONITORING",
         lastDecision: null,
@@ -143,11 +134,7 @@ export class SorrirBFTRecoveryOrchestrator extends BFTRecovery {
 
     if (transition) {
       const newMy = transition.action
-        ? transition.action(
-            this.sorrirState.state.my,
-            (e: any) => raisedEvents.push(e),
-            incomingEvent
-          )
+        ? transition.action(this.sorrirState.state.my, (e) => raisedEvents.push(e), incomingEvent)
         : this.sorrirState.state.my;
 
       this.sorrirState = {
@@ -164,6 +151,9 @@ export class SorrirBFTRecoveryOrchestrator extends BFTRecovery {
   }
 
   async invokeSorrirBFTRecovery(container = "faulty-app"): Promise<void> {
+    const taskId = `sorrir-bft-${Date.now()}`;
+    const detectTime = Date.now();
+
     this.runSorrirTransition({
       id: uuidv4(),
       eventClass: "oneway",
@@ -200,9 +190,32 @@ export class SorrirBFTRecoveryOrchestrator extends BFTRecovery {
         port: undefined,
       });
 
-      await this.notifyCloudCoordinator(decision, container, {
-        healthy: isHealthy,
+      const recoverTime = Date.now();
+      const decisionTime = recoverTime - detectTime;
+      const responseTime = decisionTime;
+      const sloViolated = responseTime > SLO_DEADLINE ? 1 : 0;
+      const memoryUsed = process.memoryUsage().heapUsed / 1024 / 1024;
+      const uptimeSeconds = process.uptime();
+      const cpuUsagePercent = 25; // Approximate value—adjust if dynamic
+      const energy = cpuUsagePercent * uptimeSeconds * 0.000277;
+      console.log("📊 Calling logMetrics with:", {
+  	taskId,
+  	responseTime,
+  	sloViolated,
+  	decisionTime,
+  	memoryUsed: memoryUsed.toFixed(2),
+  	energy: energy.toFixed(4),
       });
+      logMetrics({
+        taskId,
+        responseTime,
+        sloViolated,
+        decisionTime,
+        memoryUsed: memoryUsed.toFixed(2),
+        energy: energy.toFixed(4),
+      });
+
+      await this.notifyCloudCoordinator(decision, container, { healthy: isHealthy });
       this.logSorrirState();
     } catch (error) {
       console.error("Recovery error:", error);
@@ -265,15 +278,11 @@ export class SorrirBFTRecoveryOrchestrator extends BFTRecovery {
     container: string,
     result: any
   ): Promise<void> {
-    console.log(
-      `Notify cloud: ${container} decision=${decision} result=${JSON.stringify(
-        result
-      )}`
-    );
+    console.log(`Notify cloud: ${container} decision=${decision} result=${JSON.stringify(result)}`);
   }
 }
 
 if (require.main === module) {
   const runner = new SorrirBFTRecoveryOrchestrator();
-  runner.invokeSorrirBFTRecovery().catch(console.error);
-}
+  runner.invokeSorrirBFTRecovery
+  }
